@@ -33,5 +33,5 @@ app.listen(8080, function(){
 })
 
 app.get('/', function(req, res){
-    res.render('index.ejs' , { root : __dirname});
+    res.render('index.ejs');
 })
