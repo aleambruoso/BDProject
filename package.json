@@ -23,11 +23,8 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
-<<<<<<< HEAD
     "fs": "0.0.1-security",
     "mongodb": "^3.6.9",
-=======
->>>>>>> b6f635c874c838c6c7eea5ab2947db5247153034
     "nodemon": "^2.0.7",
     "path": "^0.12.7"
   }
