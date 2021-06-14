@@ -1,107 +1,79 @@
 <html>
     <head>
         <title>Spotify</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
-        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/spotify.css"/>
+        <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+        <script src="js/header.js"></script>
     </head>
     <body>
         <div class="container">
-            <div class="row">
+            <div class="row first_menu">
                 <div class="col-2 sf-gray-primary">
-                    <ul class="list-group">
-                        <li class="list-group-item sf-list-group-item">
-                            <span class="fa fa-home"></span>
-                            Home
-                        </li>
-                        <li class="list-group-item sf-list-group-item">
-                            <span class="fa fa-search"></span>
-                            Cerca
-                        </li>
-                        <li class="list-group-item sf-list-group-item">
-                            <span class="fa fa-folder-open"></span>
-                            Categorie
-                        </li>
-                    </ul> 
-                       
-                    <label>TOP 50</label>                
-                    <ul class="list-group">
-                        <li class="list-group-item sf-list-group-item">Top 50</li>
-                        <li class="list-group-item sf-list-group-item">Top 50 dance</li>
-                        <li class="list-group-item sf-list-group-item">Top 50 instrumental</li>
-                        <li class="list-group-item sf-list-group-item">Top 50 artists</li>
-                        <li class="list-group-item sf-list-group-item">Artistas</li>
-                        <li class="list-group-item sf-list-group-item">Podcasts</li>
-                    </ul>
-                    <br/><br/>
+                    <header class="header clearfix navbar-shrink before_menu">
+                        
+                        <ul class="header__menu animate">
+                            <li class="header__menu__item"><a href="/"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                            <li class="header__menu__item"><a href="/"><i class="fa fa-search" aria-hidden="true"></i> Ricerca avanzata</a></li>
+                            <li class="header__menu__item"><a href="/"><i class="fa fa-folder" aria-hidden="true"></i> Genere</a></li>
+                            <br/>
+
+                            <label>Top 50</label>
+
+                            <li class="header__menu__item"><a href="/">Top 50 dance</a></li>
+                            <li class="header__menu__item"><a href="/">Top 50 instrumental</a></li>
+                            <li class="header__menu__item"><a href="/">Top 50 artists</a></li>
+                            <br/>
+
+                            <label>Aggiungi/modifica</label>
+                            <li class="header__menu__item"><a href="/">Aggiungi artista</a></li>
+                            <li class="header__menu__item"><a href="/">Modifica artista</a></li>
+                            <li class="header__menu__item"><a href="/">Aggiungi brano</a></li>
+                            <li class="header__menu__item"><a href="/">Modifica brano</a></li>
+                        </ul>
+                    </header>
                 </div>
                 <div class="col-8 sf-playlist">
                     <br/>
-                    <div class="row">
-                        <div class="col-3">
-                            <input class="form-control sf-input" placeholder="Metallica"/>
-                        </div>
-                        <div class="offset-4 col-3">
-                            <button class="btn btn-dark btn-block sf-btn-default">MELHORE SUA CONTA</button>
-                        </div>       
+                    <div class="row search_bar">
                         <div class="col-2">
-                            <div class="dropdown">
-                                <button class="btn dropdown-toggle sf-dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Luciano Lopes
-                                </button>
-                                <div class="dropdown-menu sf-dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item sf-dropdown-item" href="#">Sessão privada</a>
-                                    <a class="dropdown-item sf-dropdown-item" href="#">Conta</a>
-                                    <a class="dropdown-item sf-dropdown-item" href="#">Melhore sua conta</a>
-                                    <a class="dropdown-item sf-dropdown-item" href="#">Configurações</a>
-                                    <a class="dropdown-item sf-dropdown-item" href="#">Fechar sessão</a>
-                                </div>
-                            </div>
-                        </div>                 
+                            <a href="" class="header__icon-bar">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </a>
+                        </div>  
+                        <div class="col-3">
+                            <input class="form-control sf-input" placeholder="Search..."/>
+                        </div>      
                     </div>
+                    <header class="header clearfix navbar-shrink after_menu">
+                        
+                        <ul class="header__menu animate for_swipe">
+                            <li class="header__menu__item"><a href="/">Home</a></li>
+                            <li class="header__menu__item"><a href="/">Ricerca avanzata</a></li>
+                            <li class="header__menu__item"><a href="/">Genere</a></li>
+
+                            <label class="label_menu">Top 50</label>
+
+                            <li class="header__menu__item"><a href="/">Top 50 dance</a></li>
+                            <li class="header__menu__item"><a href="/">Top 50 instrumental</a></li>
+                            <li class="header__menu__item"><a href="/">Top 50 artists</a></li>
+
+                            <label class="label_menu">Aggiungi/modifica</label>
+                            <li class="header__menu__item"><a href="/">Aggiungi artista</a></li>
+                            <li class="header__menu__item"><a href="/">Modifica artista</a></li>
+                            <li class="header__menu__item"><a href="/">Aggiungi brano</a></li>
+                            <li class="header__menu__item"><a href="/">Modifica brano</a></li>
+                        </ul>
+                    </header>
                     <br/>
                     <div class="row">
                         <div class="col-4">
-                            <h4 class="title">Metallica</h4>
-                        </div>
-                        <div class="offset-3 col-2">
-                            <button class="btn btn-dark btn-block sf-btn-primary">PAUSAR</button>
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-dark btn-block sf-btn-default">SEGUIR</button>
-                        </div>       
-                        <div class="col-1">
-                            <button class="btn btn-dark sf-btn-default">
-                                <span class="fa fa-ellipsis-h"></span>
-                            </button>
-                        </div>                  
-                    </div>
-                    <br/>
-
-                    <div class="row">
-                        <div class="col-12">
-                            <a href="#" class="sf-link">GERAL</a>
-                            <a href="#" class="sf-link">SEUS FÃS TAMBEM ESCUTAM</a>
-                            <a href="#" class="sf-link">INFORMAÇÃO</a>
-                            <a href="#" class="sf-link">SHOWS</a>
-                        </div>
-                    </div>
-
-                    <br/>
-                    <div class="row">
-                        <div class="col-2">
-                            <img src="images/album01.jpg" class="img-fluid"/>
-                        </div>
-                        <div class="col-10">
-                            <label>2019</label>
-                            <h2 class="title">Helping Hands...Live & Acoustic At The Masonic</h2>
-                            <button class="btn btn-dark sf-btn-default">
-                                <span class="fa fa-heart-o"></span>
-                            </button>
-                            <button class="btn btn-dark sf-btn-default">
-                                <span class="fa fa-ellipsis-h"></span>
-                            </button>
-                        </div>
+                            <h4 class="title">TOP 100</h4>
+                        </div>              
                     </div>
                     <br/>
 
@@ -112,121 +84,18 @@
                                     <thead>
                                         <th>#</th>
                                         <th></th>
-                                        <th>TÍTULO</th>
-                                        <th></th>
-                                        <th>
-                                            <span class="fa fa-thumbs-up"></span>
-                                        </th>
+                                        <th>TITOLO</th>
+                                        <th>ARTISTA</th>
+                                        <th>DURATA</th>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>
-                                                <span class="fa fa-heart-o"></span>
-                                            </td>
-                                            <td>Disposable Heroes - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                            <td>7:30</td>
                                             <td></td>
-                                        </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>
-                                                    <span class="fa fa-heart-o"></span>
-                                                </td>
-                                                <td>When A Blind Man Cries - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                                <td>4:34</td>
-                                                <td></td>
-                                            </tr>  
-                                            <tr>
-                                                <td>3</td>
-                                                <td>
-                                                    <span class="fa fa-heart-o"></span>
-                                                </td>
-                                                <td>The Unforgiven - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                                <td>7:20</td>
-                                                <td></td>
-                                            </tr>   
-                                            <tr>
-                                                <td>4</td>
-                                                <td>
-                                                    <span class="fa fa-heart-o"></span>
-                                                </td>
-                                                <td>Please Dont't Judas Me - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                                <td>8:03</td>
-                                                <td></td>
-                                            </tr>  
-                                            <tr>
-                                                <td>5</td>
-                                                <td>
-                                                    <span class="fa fa-heart-o"></span>
-                                                </td>
-                                                <td>Turn The Page - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                                <td>6:22</td>
-                                                <td></td>
-                                            </tr>  
-                                            <tr>
-                                                <td>6</td>
-                                                <td>
-                                                    <span class="fa fa-heart-o"></span>
-                                                </td>
-                                                <td>Bleeding Me - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                                <td>6:06</td>
-                                                <td></td>
-                                            </tr>   
-                                            <tr>
-                                                <td>7</td>
-                                                <td>
-                                                    <span class="fa fa-heart-o"></span>
-                                                </td>
-                                                <td>Veteran of the Psychic Wars - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                                <td>5:13</td>
-                                                <td></td>
-                                            </tr> 
-                                            <tr>
-                                                <td>8</td>
-                                                <td>
-                                                    <span class="fa fa-heart-o"></span>
-                                                </td>
-                                                <td>Nothing Else Matters - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                                <td>6:28</td>
-                                                <td></td>
-                                            </tr>  
-                                            <tr>
-                                                <td>9</td>
-                                                <td>
-                                                    <span class="fa fa-heart-o"></span>
-                                                </td>
-                                                <td>All Within My Hands - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                                <td>7:04</td>
-                                                <td></td>
-                                            </tr>   
-                                            <tr>
-                                                <td>10</td>
-                                                <td>
-                                                    <span class="fa fa-heart-o"></span>
-                                                </td>
-                                                <td>Enter Sandman - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                                <td>4:59</td>
-                                                <td></td>
-                                            </tr>   
-                                            <tr>
-                                                <td>11</td>
-                                                <td>
-                                                    <span class="fa fa-heart-o"></span>
-                                                </td>
-                                                <td>The Four Horsemen - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                                <td>3:33</td>
-                                                <td></td>
-                                            </tr>   
-                                            <tr>
-                                                <td>12</td>
-                                                <td>
-                                                    <span class="fa fa-heart-o"></span>
-                                                </td>
-                                                <td>Hardwired - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                                <td>4:21</td>
-                                                <td></td>
-                                            </tr>                                                                                                                                                                                                                                        
+                                            <td>Disposable Heroes - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
+                                            <td>RJveneruso</td>
+                                            <td>7:30</td>
+                                        </tr>                                                                                                                                                                                                                                       
                                     </tbody>
                                 </table>
                             </div>
