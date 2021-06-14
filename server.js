@@ -2,6 +2,7 @@ var express= require('express')
 var cookieParser = require('cookie-parser')
 var path = require('path')
 var session = require('express-session')
+var getDataControl = require('./app/control/getData.js')
 
 var app= express()
 
@@ -33,5 +34,13 @@ app.listen(8080, function(){
 })
 
 app.get('/', function(req, res){
-    res.render('index.ejs');
+  var page= req.query.page
+  if(page==null){
+    page="home"
+  }
+  var prom= getDataControl.getPage(page)
+  prom.then(function(result){
+    res.render('index.ejs', {data: result[0], name: result[1]});
+  })
+  
 })
