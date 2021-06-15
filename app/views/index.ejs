@@ -1,10 +1,11 @@
 <html>
     <head>
-        <title>Spotify</title>
+        <title>Music Library</title>
+        <script src="sweetalert2/dist/sweetalert2.all.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
         <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="css/spotify.css"/>
+        <link rel="stylesheet" href="css/index.css"/>
         <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
         <script src="js/header.js"></script>
     </head>
@@ -72,8 +73,6 @@
                     <br/>
                     <div class="row">
                         <div class="col-4">
-                            <!-- qui ci andrebbe un if sul name giusto? perchè se fai top 50 artisti le colonne cambiano e non c'è piu durata e titolo , ma solo artista-->
-                            <!-- if(strcmp(name,"Top 50 artisti"))-->
                             <h4 class="title"><%=name%></h4>
                         </div>              
                     </div>
@@ -84,32 +83,76 @@
                             <div style="overflow: auto">
                                 <table class="table">
                                     <thead>
-                                        <th>#</th>
-                                        <th></th>
-                                        <th>TITOLO</th>
-                                        <th>ARTISTA</th>
-                                        <th>DURATA</th>
+                                        <%if(name=='Top 50 artisti'){
+                                            %>
+                                            <th>#</th>
+                                            <th></th>
+                                            <th>NOME</th>
+                                            <th>GENERI</th>
+                                            <th>FOLLOWERS</th>
+                                            <%
+                                        }
+                                        else{
+                                            %>
+                                            <th>#</th>
+                                            <th></th>
+                                            <th>TITOLO</th>
+                                            <th>ARTISTA</th>
+                                            <th>DURATA</th>
+                                            <%
+                                        }%>
+                                        
                                     </thead>
                                     <tbody>
-                                        <% var i=1
-                                          function millisToMinutesAndSeconds(millis) {
+                                        <% 
+                                        function millisToMinutesAndSeconds(millis) {
                                             var minutes = Math.floor(millis / 60000);
                                             var seconds = ((millis % 60000) / 1000).toFixed(0);
                                             return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-                                          }
-                                    
-                                    
-                                        %>
-                                        <% data.forEach((item) => { %>
-                                        <tr>
-                                            
-                                            <td><%=i++%></td>
-                                            <td></td>
-                                            <td><%=item.name%></td>
-                                            <td><%=item.id_artists%></td>
-                                            <td><%=millisToMinutesAndSeconds(item.duration_ms);%></td>
-                                        </tr>       
-                                        <% }) %>                                                                                                                                                                                                                                
+                                        }
+                                        
+                                        function getArtistsName(artists){
+                                            var text=""
+                                            artists.forEach(function(artist){
+                                                text+=artist.name+', '
+                                            })
+                                            return text.substring(0, text.length-2)
+                                        }
+
+                                        function getGenre(genres){
+                                            var text=""
+                                            genres.forEach(function(genre){
+                                                text+=genre+', '
+                                            })
+                                            return text.substring(0, text.length-2)
+                                        }
+                                        var i=1
+                                        if (name=='Top 50 artisti'){
+                                            data.forEach(function(item){ %>     
+                                                <tr class="artist_line">
+                                                    
+                                                    <td><%=i++%></td>
+                                                    <td></td>
+                                                    <td class="forIdArtist" style="display: none;"><%=item._id%></td>
+                                                    <td><%=item.name%></td>
+                                                    <td><%=(item.genres[0]==null)? "Non presente" : getGenre(item.genres)%></td>
+                                                    <td><%=item.followers%></td>
+                                                </tr>    
+                                            <% }) 
+                                        }
+                                        else{
+                                            data.forEach(function(item){ %>
+                                                <tr class="song_line">
+                                                    
+                                                    <td><%=i++%></td>
+                                                    <td></td>
+                                                    <td class="forIdSong" style="display: none;"><%=item._id%></td>
+                                                    <td><%=item.name%></td>
+                                                    <td class="artists"><%=(item.artists[0]==null)? "Non presente" : getArtistsName(item.artists)%></td>
+                                                    <td><%=millisToMinutesAndSeconds(item.duration_ms);%></td>
+                                                </tr>
+                                            <% }) 
+                                        } %>                                                                                                                                                                                                                            
                                     </tbody>
                                 </table>
                             </div>

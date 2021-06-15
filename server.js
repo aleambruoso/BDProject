@@ -44,3 +44,17 @@ app.get('/', function(req, res){
   })
   
 })
+
+app.post('/getArtistInfo', function(req, res){
+  var get = getDataControl.getArtistById(req.body.id)
+  get.then(function(result){
+    res.json(result)
+  })
+})
+
+app.post('/getSongInfo', function(req, res){
+  var get = getDataControl.getSongById(req.body.id)
+  get.then(function(result){
+    res.json(result)
+  })
+})
