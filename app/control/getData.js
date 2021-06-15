@@ -53,7 +53,7 @@ exports.getPage= function(page){
         else if(page=="artist"){
             var p1= getArtists()
             p1.then(function(result){
-                var data= result.slice(0, 100)
+                var data= result.slice(0, 50)
                 resolve([data, "Top 50 artisti"])
             })
         }
@@ -115,7 +115,7 @@ function getArtists(){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Artists').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 90]}}}, {sort:{popularity: -1}}).toArray(function (err, result) {
+            dbo.collection('Artists').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 87]}}}, {sort:{popularity: -1}}).toArray(function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(result)
