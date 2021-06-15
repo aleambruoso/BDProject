@@ -115,8 +115,21 @@ function getArtists(){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Artists').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 87]}}}, {sort:{popularity: -1}}).toArray(function (err, result) {
+            var arr=[]
+            dbo.collection('Artists').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 87]}}}, {sort:{popularity: -1}, projection: {year:0}}).toArray(function (err, result) {
                 if (err) reject(err)
+                result.forEach(function(item){
+                    if(item!=null){
+                        var generi= item.genres
+                        generi= generi.replace(/(\[|\]|\')/g, '')
+                        if(generi==""){
+                            item.genres=[null]
+                        }
+                        else{
+                            item.genres= generi.split(',')
+                        }
+                    }
+                })
                 db.close()
                 resolve(result)
             })
@@ -149,7 +162,7 @@ function getArtistsName(ids){
                 var promises=[]
 
                 var prom= new Promise(function(resolve, reject){
-                    dbo.collection('Artists').findOne({id: array[i]}, {projection:{followers:0, genres:0, popularity:0}}, function(err, result){
+                    dbo.collection('Artists').findOne({id: array[i]}, {projection:{followers:0, genres:0, popularity:0, year:0}}, function(err, result){
                         if (err) reject(err)
                         db.close()
                         resolve(result)
