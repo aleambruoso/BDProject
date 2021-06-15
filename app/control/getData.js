@@ -25,6 +25,7 @@ exports.getPage= function(page){
                     resolve([data, "Top 100"])
                 })
             })
+           
             
         }
         else if(page=="dance"){
