@@ -87,7 +87,7 @@ function getHome(){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 85]}}}, {sort: {popularity: -1}, fields:{explicit:0, release_date:0, danceability:0, energy:0, instrumentalness:0}}).toArray(function (err, result) {
+            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 85]}}}, {sort: {popularity: -1}, projection:{explicit:0, release_date:0, danceability:0, energy:0, instrumentalness:0}}).toArray(function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(result)
@@ -101,7 +101,7 @@ function getDance(){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toDouble: "$danceability"}, 0.95]}}}, {sort:{danceability: -1}, fields:{explicit:0, release_date:0, popularity:0, energy:0, instrumentalness:0}}).toArray(function (err, result) {
+            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toDouble: "$danceability"}, 0.94]}}}, {sort:{danceability: -1}, projection:{explicit:0, release_date:0, popularity:0, energy:0, instrumentalness:0}}).toArray(function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(result)
@@ -129,7 +129,7 @@ function getInstrumental(){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toDouble: "$instrumentalness"}, 0.98]}}}, {sort:{instrumentalness: -1}, fields:{explicit:0, release_date:0, danceability:0, energy:0, popularity:0}}).toArray(function (err, result) {
+            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toDouble: "$instrumentalness"}, 0.98]}}}, {sort:{instrumentalness: -1}, projection:{explicit:0, release_date:0, danceability:0, energy:0, popularity:0}}).toArray(function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(result)
@@ -149,7 +149,7 @@ function getArtistsName(ids){
                 var promises=[]
 
                 var prom= new Promise(function(resolve, reject){
-                    dbo.collection('Artists').findOne({id: array[i]}, {fields:{followers:0, genres:0, popularity:0}}, function(err, result){
+                    dbo.collection('Artists').findOne({id: array[i]}, {projection:{followers:0, genres:0, popularity:0}}, function(err, result){
                         if (err) reject(err)
                         db.close()
                         resolve(result)
