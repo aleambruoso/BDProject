@@ -72,11 +72,13 @@
                     <br/>
                     <div class="row">
                         <div class="col-4">
+                            <!-- qui ci andrebbe un if sul name giusto? perchè se fai top 50 artisti le colonne cambiano e non c'è piu durata e titolo , ma solo artista-->
+                            <!-- if(strcmp(name,"Top 50 artisti"))-->
                             <h4 class="title"><%=name%></h4>
                         </div>              
                     </div>
                     <br/>
-
+                   
                     <div class="row">
                         <div class="col-12">
                             <div style="overflow: auto">
@@ -89,13 +91,25 @@
                                         <th>DURATA</th>
                                     </thead>
                                     <tbody>
+                                        <% var i=1
+                                          function millisToMinutesAndSeconds(millis) {
+                                            var minutes = Math.floor(millis / 60000);
+                                            var seconds = ((millis % 60000) / 1000).toFixed(0);
+                                            return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+                                          }
+                                    
+                                    
+                                        %>
+                                        <% data.forEach((item) => { %>
                                         <tr>
-                                            <td>1</td>
+                                            
+                                            <td><%=i++%></td>
                                             <td></td>
-                                            <td>Disposable Heroes - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                            <td>RJveneruso</td>
-                                            <td>7:30</td>
-                                        </tr>                                                                                                                                                                                                                                       
+                                            <td><%=item.name%></td>
+                                            <td><%=item.id_artists%></td>
+                                            <td><%=millisToMinutesAndSeconds(item.duration_ms);%></td>
+                                        </tr>       
+                                        <% }) %>                                                                                                                                                                                                                                
                                     </tbody>
                                 </table>
                             </div>

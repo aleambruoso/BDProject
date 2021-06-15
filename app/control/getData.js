@@ -10,6 +10,7 @@ exports.getPage= function(page){
                 var data= result.slice(0, 100)
                 resolve([data, "Top 100"])
             })
+           
             
         }
         else if(page=="dance"){
@@ -55,7 +56,7 @@ function getDance(){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toDouble: "$danceability"}, 0.95]}}, $orderby:{danceability: -1}}).toArray(function (err, result) {
+            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toDouble: "$danceability"}, 0.95]}}, $orderby:{danceability: -1}}).limit(50).toArray(function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(result)
@@ -69,7 +70,7 @@ function getArtists(){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Artists').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 90]}}, $orderby:{popularity: -1}}).toArray(function (err, result) {
+            dbo.collection('Artists').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 90]}}, $orderby:{popularity: -1}}).limit(50).toArray(function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(result)
@@ -83,7 +84,7 @@ function getInstrumental(){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toDouble: "$instrumentalness"}, 0.98]}}, $orderby:{instrumentalness: -1}}).toArray(function (err, result) {
+            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toDouble: "$instrumentalness"}, 0.98]}}, $orderby:{instrumentalness: -1}}).limit(50).toArray(function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(result)
