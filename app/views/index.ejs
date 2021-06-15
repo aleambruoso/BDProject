@@ -89,13 +89,25 @@
                                         <th>DURATA</th>
                                     </thead>
                                     <tbody>
+                                        <% var i=1
+                                          function millisToMinutesAndSeconds(millis) {
+                                            var minutes = Math.floor(millis / 60000);
+                                            var seconds = ((millis % 60000) / 1000).toFixed(0);
+                                            return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+                                          }
+                                    
+                                    
+                                        %>
+                                        <% data.forEach((item) => { %>
                                         <tr>
-                                            <td>1</td>
+                                            
+                                            <td><%=i++%></td>
                                             <td></td>
-                                            <td>Disposable Heroes - Live At The Masonic, San Francisco, CA - November 3rd, 2018</td>
-                                            <td>RJveneruso</td>
-                                            <td>7:30</td>
-                                        </tr>                                                                                                                                                                                                                                       
+                                            <td><%=item.name%></td>
+                                            <td><%=item.id_artists%></td>
+                                            <td><%=millisToMinutesAndSeconds(item.duration_ms);%></td>
+                                        </tr>       
+                                        <% }) %>                                                                                                                                                                                                                                
                                     </tbody>
                                 </table>
                             </div>
