@@ -129,10 +129,11 @@
                                         var i=1
                                         if (name=='Top 50 artisti'){
                                             data.forEach(function(item){ %>     
-                                                <tr class="song_line">
+                                                <tr class="artist_line">
                                                     
                                                     <td><%=i++%></td>
                                                     <td></td>
+                                                    <td class="forIdArtist" style="display: none;"><%=item._id%></td>
                                                     <td><%=item.name%></td>
                                                     <td><%=(item.genres[0]==null)? "Non presente" : getGenre(item.genres)%></td>
                                                     <td><%=item.followers%></td>
@@ -145,8 +146,9 @@
                                                     
                                                     <td><%=i++%></td>
                                                     <td></td>
+                                                    <td class="forIdSong" style="display: none;"><%=item._id%></td>
                                                     <td><%=item.name%></td>
-                                                    <td><%=(item.artists[0]==null)? "Non presente" : getArtistsName(item.artists)%></td>
+                                                    <td class="artists"><%=(item.artists[0]==null)? "Non presente" : getArtistsName(item.artists)%></td>
                                                     <td><%=millisToMinutesAndSeconds(item.duration_ms);%></td>
                                                 </tr>
                                             <% }) 

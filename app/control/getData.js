@@ -1,4 +1,6 @@
 var MongoClient = require('mongodb').MongoClient
+var ObjectID = require('mongodb').ObjectId
+
 const url = 'mongodb://localhost:27017/BDProject'
 const dbName = 'BDProject'
 
@@ -79,6 +81,24 @@ exports.getPage= function(page){
                 })
             })
         }
+    })
+}
+
+exports.getArtistById= function(id){
+    return new Promise(function(resolve, reject){
+        var get= getArtistId(id)
+        get.then(function(result){
+            resolve(result)
+        })
+    })
+}
+
+exports.getSongById= function(id){
+    return new Promise(function(resolve, reject){
+        var get= getSongId(id)
+        get.then(function(result){
+            resolve(result)
+        })
     })
 }
 
@@ -177,6 +197,42 @@ function getArtistsName(ids){
                     names.push(artist)
                 })
                 resolve(names)
+            })
+        })
+    })
+}
+
+function getArtistId(id){
+    return new Promise(function(resolve, reject){
+        MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+            if (err) reject(err)
+            var dbo = db.db(dbName)
+            dbo.collection('Artists').findOne({_id: ObjectID(id)}, function (err, result) {
+                if (err) reject(err)
+                db.close()
+                var generi= result.genres
+                generi= generi.replace(/(\[|\]|\')/g, '')
+                if(generi==""){
+                    result.genres=[null]
+                }
+               else{
+                    result.genres= generi.split(',')
+                }
+                resolve(result)
+            })
+        })
+    })
+}
+
+function getSongId(id){
+    return new Promise(function(resolve, reject){
+        MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+            if (err) reject(err)
+            var dbo = db.db(dbName)
+            dbo.collection('Tracks').findOne({_id: ObjectID(id)}, function (err, result) {
+                if (err) reject(err)
+                db.close()
+                resolve(result)
             })
         })
     })
