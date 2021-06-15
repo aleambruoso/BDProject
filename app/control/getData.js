@@ -33,14 +33,14 @@ exports.getPage= function(page){
         else if(page=="dance"){
             var p1= getDance()
             p1.then(function(result){
-                var data= result.slice(0, 100)
+                var data= result.slice(0, 50)
                 var promises=[]
                 data.forEach(function(song){
                     var dataName= getArtistsName(song.id_artists)
                     promises.push(dataName)
                 })
                 Promise.all(promises).then(function(names){
-                    for(var i=0; i<100; i++){
+                    for(var i=0; i<50; i++){
                         if(names[i]==null){
                             data[i].artists="null"
                         }
@@ -62,14 +62,14 @@ exports.getPage= function(page){
         else if(page=="instrumental"){
             var p1= getInstrumental()
             p1.then(function(result){
-                var data= result.slice(0, 100)
+                var data= result.slice(0, 50)
                 var promises=[]
                 data.forEach(function(song){
                     var dataName= getArtistsName(song.id_artists)
                     promises.push(dataName)
                 })
                 Promise.all(promises).then(function(names){
-                    for(var i=0; i<100; i++){
+                    for(var i=0; i<50; i++){
                         if(names[i]==null){
                             data[i].artists="null"
                         }
@@ -121,7 +121,7 @@ function getDance(){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toDouble: "$danceability"}, 0.94]}}}, {sort:{danceability: -1}, projection:{explicit:0, release_date:0, popularity:0, energy:0, instrumentalness:0}}).toArray(function (err, result) {
+            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toDouble: "$danceability"}, 0.95]}}}, {sort:{danceability: -1}, projection:{explicit:0, release_date:0, popularity:0, energy:0, instrumentalness:0}}).toArray(function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(result)
