@@ -16,4 +16,14 @@ $(document).ready(function(){
         }
 
     });
+
+    $('.song_line').click(function(){
+        Swal.fire({
+            icon: 'info', 
+            title: 'Informazioni', 
+            html: '<b>Strumentalness:0.5<br>Popularity:8<br>foll:500</b>',
+            showCloseButton: true,
+            confirmButtonText: 'Ok'
+        })
+    })
 });
