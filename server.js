@@ -40,7 +40,7 @@ app.get('/', function(req, res){
   }
   var prom= getDataControl.getPage(page)
   prom.then(function(result){
-    res.render('index.ejs', {data: result[0], name: result[1]});
+    res.render('index.ejs', {data: JSON.stringify(result[0]).replace(/'/g, '\\\'').replace(/"/g, '\\\"'), name: result[1]});
   })
   
 })
@@ -54,6 +54,20 @@ app.post('/getArtistInfo', function(req, res){
 
 app.post('/getSongInfo', function(req, res){
   var get = getDataControl.getSongById(req.body.id)
+  get.then(function(result){
+    res.json(result)
+  })
+})
+
+app.post('/searchArtists', function(req, res){
+  var get= getDataControl.searchArtists(req.body.val)
+  get.then(function(result){
+    res.json(result)
+  })
+})
+
+app.post('/searchSongs', function(req, res){
+  var get= getDataControl.searchSongs(req.body.val)
   get.then(function(result){
     res.json(result)
   })

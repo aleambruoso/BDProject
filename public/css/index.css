@@ -154,32 +154,18 @@ tr:hover{
   flex: none !important;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.not_element{
+  color: white;
+  text-align: center;
+  font-weight: bolder;
+  font-size: 3em;
+}
 
   
 *, *:before, *:after {
     box-sizing:border-box;
 }
 
-/*.swal2-popup {
-    font-size: 1.5rem;
-}*/
 
 body{
     margin: 0;
