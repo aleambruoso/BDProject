@@ -46,7 +46,15 @@ function insert () {
                             dbo.collection('Artists').insertMany(result2, function (err, result) {
                                 if (err) reject(err)
                                 console.log('Succesfully inserted into database ' + result.insertedCount + ' artists')
-                                resolve()
+                                dbo.collection('Artists').createIndex({popularity: -1}, function (err, result) {
+                                    if (err) reject(err)
+                                    console.log('Succesfully created index in Artists')
+                                    dbo.collection('Tracks').createIndex({popularity: -1}, function (err, result) {
+                                        if (err) reject(err)
+                                        console.log('Succesfully created index in Tracks')
+                                        resolve()
+                                    })
+                                })
                             })
                         })
                     })
@@ -87,11 +95,9 @@ function deleteArtistss(array){
                                     }
                                 }
                             })
-                            console.log(index)
                             resolve(index)
                         })
                     ]).then(function(result){
-                        console.log(result)
                         result.forEach(function(ind){
                             array.splice(ind, 1)
                         })
@@ -121,7 +127,6 @@ function deleteArtists(array){
                 newJsonArray.push(elem)
             }
         })
-        console.log(newJsonArray)
         resolve(newJsonArray)
     })
 }
