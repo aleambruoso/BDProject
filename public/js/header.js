@@ -108,7 +108,7 @@ $(document).ready(function(){
 
                     if(result.length==0){
                         if($('.not_element').length==0){
-                            $('.table_body').append('<h2 class="not_element">Nessun artista trovato</h2>')
+                            $('.table').after('<h2 class="not_element">Nessun artista trovato</h2>')
                         }
                     }
                     else{
@@ -131,8 +131,9 @@ $(document).ready(function(){
 
     $('.search_song').on('input', function(){
         var val= $(this).val()
+        console.log(val.length)
         if (val.length==0){
-            $('.artist_line').remove()
+            $('.song_line').remove()
             startPage(pageName, pageData)
         }
         else{
@@ -141,13 +142,12 @@ $(document).ready(function(){
                 url:'/searchSongs',
                 data:{val: val},
                 success: function(result){
-                    console.log(result)
                     $('.song_line').remove()
                     $('.not_element').remove()
 
                     if(result.length==0){
                         if($('.not_element').length==0){
-                            $('.table_body').append('<h2 class="not_element">Nessuna canzone trovata</h2>')
+                            $('.table').after('<h2 class="not_element">Nessuna canzone trovata</h2>')
                         }
                     }
                     else{
@@ -184,7 +184,7 @@ $(document).ready(function(){
 
             if(found.length==0){
                 if($('.not_element').length==0){
-                    $('.table_body').append('<h2 class="not_element">Nessuna canzone trovata</h2>')
+                    $('.table').after('<h2 class="not_element">Nessuna canzone trovata</h2>')
                 }
             }
             else{
@@ -237,7 +237,9 @@ function getArtists(artists){
 
 function startPage(name, data){
     var i=1
+    $('.not_element').remove()
     if (name=='Top 50 artisti'){
+        $('.artist_line').remove()
         data.forEach(function(item){   
             $('.table_body').append(['<tr class="artist_line">',
                                         '<td>'+i+++'</td>',
@@ -250,6 +252,7 @@ function startPage(name, data){
         })
     }
     else if(name=='Generi'){
+        $('.generi_line').remove()
         data.forEach(function(item){   
             $('.table_body').append(['<tr class="generi_line">',
                                         '<td>'+i+++'</td>',
@@ -261,6 +264,7 @@ function startPage(name, data){
         })
     }
     else{
+        $('.song_line').remove()
         data.forEach(function(item){
             $('.table_body').append(['<tr class="song_line">',
                                         '<td>'+i+++'</td>',
