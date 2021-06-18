@@ -1,5 +1,6 @@
 var MongoClient = require('mongodb').MongoClient
 var ObjectID = require('mongodb').ObjectId
+var lodash= require('lodash/array')
 
 const url = 'mongodb://localhost:27017/BDProject'
 const dbName = 'BDProject'
@@ -21,14 +22,19 @@ exports.getPage= function(page){
         else if(page=="artist"){
             var p1= getArtists()
             p1.then(function(result){
-                var data= result.slice(0, 50)
-                resolve([data, "Top 50 artisti"])
+                resolve([result, "Top 50 artisti"])
             })
         }
         else if(page=="instrumental"){
             var p1= getInstrumental()
             p1.then(function(result){
                 resolve([result, "Top 50 strumentale"])
+            })
+        }
+        else if(page=="genres"){
+            var p1= getGenres()
+            p1.then(function(result){
+                resolve([result, "Generi"])
             })
         }
     })
@@ -112,7 +118,8 @@ function getArtists(){
             var arr=[]
             dbo.collection('Artists').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 87]}}}, {sort:{popularity: -1}, projection: {year:0}}).toArray(function (err, result) {
                 if (err) reject(err)
-                var get= resolveGenres(result)
+                var data= result.slice(0, 50)
+                var get= resolveGenres(data)
                 get.then(function(result1){
                     db.close()
                     resolve(result1)
@@ -275,5 +282,65 @@ function resolveArtists(data){
             }
             resolve(data)
         })
+    })
+}
+
+function getGenres(){
+    return new Promise(function(resolve, reject){
+        MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+            if (err) reject(err)
+            var dbo = db.db(dbName)
+            dbo.collection('Artists').find({}, {sort:{popularity: -1}, projection: {year:0, followers:0, popularity:0}}).toArray(function (err, result) {
+                if (err) reject(err)
+                var data= result.slice(0, 50)
+                var get= resolveGenres(data)
+                get.then(function(result1){
+                    db.close()
+                    var un= unionArray(result1)
+                    un.then(function(result2){
+                        resolve(result2)
+                    })
+                })
+            })
+        })
+    })
+}
+
+function unionArray(artists){
+    return new Promise(function(resolve, reject){
+        var temp=[]
+        artists.forEach(function(artist){
+            if(temp.length!=0){
+                if(artist.genres[0]!=null){
+
+                    temp=lodash.union(temp, artist.genres.map(function(s){return s.trim()}))
+                }
+            }
+            else{
+                temp=artist.genres.map(function(s){return s.trim()})
+            }
+        })
+        var data= temp.map(function(value, key){
+            return{
+                "title":value
+            }
+        })
+        artists.forEach(function(artist){
+            if(artist.genres[0]!=null){
+                artist.genres.forEach(function(genere){
+                    var index= data.findIndex(function(item){return item.title.trim()==genere.trim()})
+                    if(index!=-1){
+                        if(data[index].artistsName!=null && data[index].artistsName.length!=0){
+                            data[index].artistsName.push(artist.name)
+                        }
+                        else{
+                            data[index].artistsName=[artist.name]
+                        }
+                        
+                    }
+                })
+            }
+        })
+        resolve(data)
     })
 }

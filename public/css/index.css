@@ -166,14 +166,6 @@ tr:hover{
     box-sizing:border-box;
 }
 
-
-body{
-    margin: 0;
-    color: black;
-    display: flex;
-    flex-direction: column;
-}
-
 .animate{
     -webkit-transition: all 0.3s ease-out;
 	transition: all 0.3s ease-out;

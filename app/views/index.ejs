@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="css/index.css"/>
         <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
         <script src="js/header.js"></script>
+        <link rel="stylesheet" href="@sweetalert2/theme-dark/dark.css">
     </head>
     <body>
         <div class="container">
@@ -18,8 +19,7 @@
                         
                         <ul class="header__menu animate">
                             <li class="header__menu__item"><a href="/?page=home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-                            <li class="header__menu__item"><a href="/"><i class="fa fa-search" aria-hidden="true"></i> Ricerca avanzata</a></li>
-                            <li class="header__menu__item"><a href="/"><i class="fa fa-folder" aria-hidden="true"></i> Genere</a></li>
+                            <li class="header__menu__item"><a href="/?page=genres"><i class="fa fa-folder" aria-hidden="true"></i> Genere</a></li>
                             <br/>
 
                             <label>Top 50</label>
@@ -51,6 +51,9 @@
                             <%if(name=='Top 50 artisti'){%>
                                 <input class="form-control sf-input search_artist" placeholder="Cerca artista..."/>
                             <%}
+                            else if(name=='Generi'){%>
+                                <input class="form-control sf-input search_genre" placeholder="Cerca genere..."/>
+                            <%}
                             else{%>
                                 <input class="form-control sf-input search_song" placeholder="Cerca canzone..."/>
                             <%}%>
@@ -60,8 +63,7 @@
                         
                         <ul class="header__menu animate for_swipe">
                             <li class="header__menu__item"><a href="/?page=home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-                            <li class="header__menu__item"><a href="/"><i class="fa fa-search" aria-hidden="true"></i> Ricerca avanzata</a></li>
-                            <li class="header__menu__item"><a href="/"><i class="fa fa-folder" aria-hidden="true"></i> Genere</a></li>
+                            <li class="header__menu__item"><a href="/?page=genres"><i class="fa fa-folder" aria-hidden="true"></i> Genere</a></li>
 
                             <label class="label_menu">Top 50</label>
 
@@ -98,6 +100,13 @@
                                             <th>FOLLOWERS</th>
                                             <%
                                         }
+                                        else if(name=='Generi'){%>
+                                            <th>#</th>
+                                            <th></th>
+                                            <th>GENERE</th>
+                                            <th>ARTISTI</th>
+                                            <th></th>
+                                        <%}
                                         else{
                                             %>
                                             <th>#</th>

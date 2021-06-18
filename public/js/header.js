@@ -70,6 +70,27 @@ $(document).ready(function(){
         })
     })
 
+    $(document).on("click", '.generi_line', function(){
+        var title= $(this).children('.title_genre').text()
+        console.log(title)
+        var index= pageData.findIndex(function(item){return item.title==title})
+        var html="<b>Genere: </b>"+title+"</br><b>"
+        var artisti= pageData[index].artistsName
+        html+="Artisti: </b>"
+        artisti.forEach(function(art){
+            html+=art+",</br>"
+        })
+        html=html.substring(0, html.length-6)
+        html+="</br><b>"
+        Swal.fire({
+            icon: 'info', 
+            title: 'Informazioni', 
+            html: html,
+            showCloseButton: true,
+            confirmButtonText: 'Ok'
+        })
+    })
+
     $('.search_artist').on('input', function(){
         var val= $(this).val()
         if (val.length==0){
@@ -101,7 +122,6 @@ $(document).ready(function(){
                                                         '<td>'+((artist.genres[0]==null)? "Non presente" : getGenre(artist.genres))+'</td>',
                                                         '<td>'+artist.followers+'</td>',
                                                     '</tr>'].join('\n'))
-                            i++
                         })
                     }
                 }
@@ -141,11 +161,44 @@ $(document).ready(function(){
                                                         '<td class="artists">'+((song.artists[0]==null)? "Non presente" : getArtistsName(song.artists))+'</td>',
                                                         '<td>'+millisToMinutesAndSeconds(song.duration_ms)+'</td>',
                                                     '</tr>'].join('\n'))
-                            i++
                         })
                     }
                 }
             })
+        }
+    })
+
+    $('.search_genre').on('input', function(){
+        var val= $(this).val()
+        if (val.length==0){
+            $('.generi_line').remove()
+            startPage(pageName, pageData)
+        }
+        else{
+            var found= pageData.filter(function(data){
+                return data.title.indexOf(val)!=-1
+            })
+
+            $('.generi_line').remove()
+            $('.not_element').remove()
+
+            if(found.length==0){
+                if($('.not_element').length==0){
+                    $('.table_body').append('<h2 class="not_element">Nessuna canzone trovata</h2>')
+                }
+            }
+            else{
+                var i=1
+                found.forEach(function(genre){
+                    $('.table_body').append(['<tr class="generi_line">',
+                                                '<td>'+i+++'</td>',
+                                                '<td></td>',
+                                                '<td class="title_genre">'+genre.title+'</td>',
+                                                '<td>'+((genre.artistsName==null)? "Non presente" : getArtists(genre.artistsName))+'</td>',
+                                                '<td></td>',
+                                            '</tr>'].join('\n'))
+                })
+            }
         }
     })
 });
@@ -173,6 +226,14 @@ function getGenre(genres){
     return text.substring(0, text.length-2)
 }
 
+function getArtists(artists){
+    var text=""
+    artists.slice(0,50).forEach(function(artist){
+        text+=artist+', '
+    })
+    return text.substring(0, text.length-2)
+}
+
 
 function startPage(name, data){
     var i=1
@@ -185,6 +246,17 @@ function startPage(name, data){
                                         '<td>'+item.name+'</td>',
                                         '<td>'+((item.genres[0]==null)? "Non presente" : getGenre(item.genres))+'</td>',
                                         '<td>'+item.followers+'</td>',
+                                    '</tr>'].join('\n'))
+        })
+    }
+    else if(name=='Generi'){
+        data.forEach(function(item){   
+            $('.table_body').append(['<tr class="generi_line">',
+                                        '<td>'+i+++'</td>',
+                                        '<td></td>',
+                                        '<td class="title_genre">'+item.title+'</td>',
+                                        '<td>'+((item.artistsName==null)? "Non presenti" : getArtists(item.artistsName))+'</td>',
+                                        '<td></td>',
                                     '</tr>'].join('\n'))
         })
     }

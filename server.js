@@ -40,7 +40,7 @@ app.get('/', function(req, res){
   }
   var prom= getDataControl.getPage(page)
   prom.then(function(result){
-    res.render('index.ejs', {data: JSON.stringify(result[0]).replace(/'/g, '\\\'').replace(/"/g, '\\\"'), name: result[1]});
+    res.render('index.ejs', {data: JSON.stringify(result[0]).replace(/'/g, '\\\'').replace(/"/g, '\\\"'), name: result[1]})
   })
   
 })
