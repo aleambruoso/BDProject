@@ -78,44 +78,11 @@ function readArtists(){
     })
 }
 
-function deleteArtistss(array){
-    return new Promise(function(resolve, reject){
-        Promise.all([
-            new Promise(function(resolve, reject){
-                array.forEach(function(elem){
-                    var temp= elem.name
-                    var id= elem.id
-                    Promise.all([
-                        new Promise(function(resolve, reject){
-                            var index=[]
-                            array.forEach(function(toComp){
-                                if(temp==toComp.name){
-                                    if(id!=toComp.id){
-                                        index.push(array.indexOf(toComp))
-                                    }
-                                }
-                            })
-                            resolve(index)
-                        })
-                    ]).then(function(result){
-                        result.forEach(function(ind){
-                            array.splice(ind, 1)
-                        })
-                    })
-                })
-                resolve()
-            })
-        ])
-        .then(function(){
-            resolve(array)
-        })
-    })
-}
-
 function deleteArtists(array){
     return new Promise(function(resolve, reject){
         var newJsonArray=[]
         array.forEach(function(elem){
+            delete elem.year
             var temp= elem.name
             var bool=true
             newJsonArray.forEach(function(toComp){

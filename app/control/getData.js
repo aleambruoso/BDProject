@@ -116,7 +116,7 @@ function getArtists(){
             if (err) reject(err)
             var dbo = db.db(dbName)
             var arr=[]
-            dbo.collection('Artists').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 87]}}}, {sort:{popularity: -1}, projection: {year:0}}).toArray(function (err, result) {
+            dbo.collection('Artists').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 87]}}}, {sort:{popularity: -1}}).toArray(function (err, result) {
                 if (err) reject(err)
                 var data= result.slice(0, 50)
                 var get= resolveGenres(data)
@@ -157,7 +157,7 @@ function getArtistsName(ids){
                 var promises=[]
 
                 var prom= new Promise(function(resolve, reject){
-                    dbo.collection('Artists').findOne({id: array[i]}, {projection:{followers:0, genres:0, popularity:0, year:0}}, function(err, result){
+                    dbo.collection('Artists').findOne({id: array[i]}, {projection:{followers:0, genres:0, popularity:0}}, function(err, result){
                         if (err) reject(err)
                             resolve(result)
                     })
@@ -217,7 +217,7 @@ function getSearchedArtists(val){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Artists').find({name:{$regex: val, $options : 'i'}}, {sort:{popularity: -1}, projection: {year:0}}).limit(50).toArray(function (err, result) {
+            dbo.collection('Artists').find({name:{$regex: val, $options : 'i'}}, {sort:{popularity: -1}}).limit(50).toArray(function (err, result) {
                 if (err) reject(err)
                 db.close()
                 var get= resolveGenres(result)
@@ -290,7 +290,7 @@ function getGenres(){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Artists').find({}, {sort:{popularity: -1}, projection: {year:0, followers:0, popularity:0}}).toArray(function (err, result) {
+            dbo.collection('Artists').find({}, {sort:{popularity: -1}, projection: {followers:0, popularity:0}}).toArray(function (err, result) {
                 if (err) reject(err)
                 var data= result.slice(0, 50)
                 var get= resolveGenres(data)
