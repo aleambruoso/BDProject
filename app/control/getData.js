@@ -76,6 +76,18 @@ exports.searchSongs= function(val){
     })
 }
 
+exports.saveArtist= function(artist){
+    return new Promise(function(resolve, reject){
+        var id= ObjectID()
+        artist.id= id.toString()
+        artist._id= id
+        var set= insertArtist(artist)
+        set.then(function(result){
+            resolve(result)
+        })
+    })
+}
+
 function getHome(){
     return new Promise(function(resolve, reject){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
@@ -342,5 +354,19 @@ function unionArray(artists){
             }
         })
         resolve(data)
+    })
+}
+
+function insertArtist(artist){
+    return new Promise(function(resolve, reject){
+        MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+            if (err) reject(err)
+            var dbo = db.db(dbName)
+            dbo.collection('Artists').insertOne(artist,function (err, result) {
+                if (err) reject(err)
+                db.close()
+                resolve(true)
+            })
+        })
     })
 }
