@@ -79,3 +79,10 @@ app.post('/saveArtist', function(req, res){
     res.json(result)
   })
 })
+
+app.post('/editArtist', function(req, res){
+  var set= getDataControl.editArtist(req.body.artist, req.body.id)
+  set.then(function(result){
+    res.json(result)
+  })
+})

@@ -35,7 +35,13 @@ $(document).ready(function(){
                     title: 'Informazioni', 
                     html: html,
                     showCloseButton: true,
-                    confirmButtonText: 'Ok'
+                    confirmButtonText: 'Ok',
+                    showDenyButton: true,
+                    denyButtonText: 'Modifica'
+                }).then(function(result){
+                    if(result.isDenied){
+
+                    }
                 })
             }
         })
@@ -48,6 +54,7 @@ $(document).ready(function(){
             url:'/getArtistInfo',
             data:{id: id},
             success: function(result){
+                var artist=result
                 var html="<b>Nome: </b>"+result.name+"</br><b>"
                 var generi= result.genres
                 if(generi[0]!=null){
@@ -64,7 +71,163 @@ $(document).ready(function(){
                     title: 'Informazioni', 
                     html: html,
                     showCloseButton: true,
-                    confirmButtonText: 'Ok'
+                    confirmButtonText: 'Ok',
+                    showDenyButton: true,
+                    denyButtonText: 'Modifica'
+                }).then(function(result){
+                    if(result.isDenied){
+                        Swal.fire({ 
+                            title: 'Modifica artista', 
+                            text: 'Modifica il nome',
+                            input: 'text',
+                            inputValue: artist.name,
+                            backdrop: true,
+                            showCloseButton: true,
+                            confirmButtonText: 'Modifica <i class="fa fa-arrow-right"></i>',
+                            showLoaderOnConfirm: true,
+                            showDenyButton: true,
+                            denyButtonText: 'Salta',
+                            preConfirm: function(item){
+                                if(item==""){
+                                    Swal.showValidationMessage(
+                                        'Il campo non può essere vuoto'
+                                    )
+                                }
+                            },
+                            allowOutsideClick: () => !Swal.isLoading()
+                        }).then(function(result){
+                            var updateJson={$set:{}}
+                            if(result.isConfirmed){
+                                updateJson.$set.name=result.value
+                            }
+                            if(result.isConfirmed || result.isDenied){
+                                Swal.fire({ 
+                                    title: 'Modifica artista', 
+                                    text: 'Modifica numero followers',
+                                    input: 'text',
+                                    inputValue: artist.followers,
+                                    backdrop: true,
+                                    showCloseButton: true,
+                                    confirmButtonText: 'Modifica <i class="fa fa-arrow-right"></i>',
+                                    showLoaderOnConfirm: true,
+                                    showDenyButton: true,
+                                    denyButtonText: 'Salta',
+                                    preConfirm: function(item){
+                                        if(item==""){
+                                            Swal.showValidationMessage(
+                                                'Il campo non può essere vuoto'
+                                            )
+                                        }
+                                        else if(isNaN(item)){
+                                            Swal.showValidationMessage(
+                                                'Il campo deve contenere un numero'
+                                            )
+                                        }
+                                    },
+                                    allowOutsideClick: () => !Swal.isLoading()
+                                }).then(function(result){
+                                    if(result.isConfirmed){
+                                        updateJson.$set.followers=result.value
+                                    }
+                                    if(result.isConfirmed || result.isDenied){
+                                        Swal.fire({ 
+                                            title: 'Modifica artista', 
+                                            text: 'Modifica popolarità artista',
+                                            input: 'text',
+                                            inputValue: artist.popularity,
+                                            backdrop: true,
+                                            showCloseButton: true,
+                                            confirmButtonText: 'Modifica <i class="fa fa-arrow-right"></i>',
+                                            showLoaderOnConfirm: true,
+                                            showDenyButton: true,
+                                            denyButtonText: 'Salta',
+                                            preConfirm: function(item){
+                                                if(item==""){
+                                                    Swal.showValidationMessage(
+                                                        'Il campo non può essere vuoto'
+                                                    )
+                                                }
+                                                else if(isNaN(item)){
+                                                    Swal.showValidationMessage(
+                                                        'Il campo deve contenere un numero'
+                                                    )
+                                                }
+                                                else if(item<0 || item>100){
+                                                    Swal.showValidationMessage(
+                                                        'Il valore deve essere compreso tra 0 e 100'
+                                                    )
+                                                }
+                                            },
+                                            allowOutsideClick: () => !Swal.isLoading()
+                                        }).then(function(result){
+                                            if(result.isConfirmed){
+                                                updateJson.$set.popularity=result.value
+                                            }
+                                            if(result.isConfirmed || result.isDenied){
+                                                var editGeneri= stringGenre(artist.genres)
+                                                Swal.fire({ 
+                                                    title: 'Modifica artista', 
+                                                    text: 'Modifica i generi dell\'artista (scrivere "Non presenti" nel caso non ci siano)',
+                                                    input: 'text',
+                                                    inputValue: editGeneri,
+                                                    backdrop: true,
+                                                    showCloseButton: true,
+                                                    confirmButtonText: 'Modifica <i class="fa fa-arrow-right"></i>',
+                                                    showLoaderOnConfirm: true,
+                                                    showDenyButton: true,
+                                                    denyButtonText: 'Salta',
+                                                    preConfirm: function(item){
+                                                        if(item==""){
+                                                            Swal.showValidationMessage(
+                                                                'Il campo non può essere vuoto'
+                                                            )
+                                                        }
+                                                    },
+                                                    allowOutsideClick: () => !Swal.isLoading()
+                                                }).then(function(result){
+                                                    if(result.isConfirmed){
+                                                        if(result.value=="Non presenti"){
+                                                            updateJson.$set.genres="[]"
+                                                        }
+                                                        else{
+                                                            var list= result.value.split(',')
+                                                            var artistGenres="["
+                                                            list.forEach(function(elem){
+                                                                elem.trim()
+                                                                artistGenres+="'"+elem+"'"
+                                                                artistGenres+=", "
+                                                            })
+                                                            artistGenres= artistGenres.substr(0, artistGenres.length-2)
+                                                            artistGenres+="]"
+                                                            updateJson.$set.genres=artistGenres
+                                                        }
+                                                    }
+                                                    if(result.isConfirmed || result.isDenied){
+                                                        $.ajax({
+                                                            type: 'POST',
+                                                            url:'/editArtist',
+                                                            data:{artist: updateJson, id: artist._id},
+                                                            success: function(result){
+                                                                Swal.fire({
+                                                                    icon: 'success', 
+                                                                    title: 'Artista modificato', 
+                                                                    text: 'L\'artista è stato modificato con successo.',
+                                                                    showCloseButton: true,
+                                                                    confirmButtonText: 'Ok'
+                                                                }).then(function(result){
+                                                                    location.reload()
+                                                                })
+                                                            }
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        })
+                    }
                 })
             }
         })
@@ -276,4 +439,18 @@ function startPage(name, data){
                                     '</tr>'].join('\n'))
         })
     }
+}
+
+function stringGenre(generi){
+    var string=""
+    if(generi[0]!=null){
+        generi.forEach(function(gen){
+            string+=gen+", "
+        })
+        string=string.substring(0, string.length-2)
+    }
+    else{
+        string="Non presenti"
+    }
+    return string
 }

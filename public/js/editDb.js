@@ -77,7 +77,7 @@ $(document).ready(function(){
                                 var artistPopularity= result.value
                                 Swal.fire({ 
                                     title: 'Aggiungi artista', 
-                                    text: 'Inserisci i generi dell\'artista',
+                                    text: 'Inserisci i generi dell\'artista (scrivere "Non presenti" nel caso non ci siano)',
                                     input: 'text',
                                     inputPlaceholder: 'Generi (separa con una virgola)...',
                                     backdrop: true,
@@ -94,15 +94,20 @@ $(document).ready(function(){
                                     allowOutsideClick: () => !Swal.isLoading()
                                 }).then(function(result){
                                     if(result.isConfirmed){
-                                        var generi= result.value.split(',')
-                                        var artistGenres="["
-                                        generi.forEach(function(elem){
-                                            elem.trim()
-                                            artistGenres+="'"+elem+"'"
-                                            artistGenres+=", "
-                                        })
-                                        artistGenres= artistGenres.substr(0, artistGenres.length-2)
-                                        artistGenres+="]"
+                                        if(result.value=="Non presenti"){
+                                            var artistGenres="[]"
+                                        }
+                                        else{
+                                            var generi= result.value.split(',')
+                                            var artistGenres="["
+                                            generi.forEach(function(elem){
+                                                elem.trim()
+                                                artistGenres+="'"+elem+"'"
+                                                artistGenres+=", "
+                                            })
+                                            artistGenres= artistGenres.substr(0, artistGenres.length-2)
+                                            artistGenres+="]"
+                                        }
                                         var artist={name: artistName, popularity: artistPopularity, followers: artistFollowers, genres: artistGenres}
                                         $.ajax({
                                             type: 'POST',
@@ -112,9 +117,12 @@ $(document).ready(function(){
                                                 Swal.fire({
                                                     icon: 'success', 
                                                     title: 'Artista salvato', 
-                                                    text: 'l\'artista è stato salvato con successo.',
+                                                    text: 'L\'artista è stato salvato con successo.',
                                                     showCloseButton: true,
                                                     confirmButtonText: 'Ok'
+                                                })
+                                                .then(function(result){
+                                                    location.reload()
                                                 })
                                             }
                                         })
@@ -127,4 +135,6 @@ $(document).ready(function(){
             }
         })
     })
+
+
 })

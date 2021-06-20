@@ -88,6 +88,15 @@ exports.saveArtist= function(artist){
     })
 }
 
+exports.editArtist= function(artist, id){
+    return new Promise(function(resolve, reject){
+        var edit= updateArtist(artist, id)
+        edit.then(function(result){
+            resolve(result)
+        })
+    })
+}
+
 function getHome(){
     return new Promise(function(resolve, reject){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
@@ -363,6 +372,20 @@ function insertArtist(artist){
             if (err) reject(err)
             var dbo = db.db(dbName)
             dbo.collection('Artists').insertOne(artist,function (err, result) {
+                if (err) reject(err)
+                db.close()
+                resolve(true)
+            })
+        })
+    })
+}
+
+function updateArtist(artist, id){
+    return new Promise(function(resolve, reject){
+        MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+            if (err) reject(err)
+            var dbo = db.db(dbName)
+            dbo.collection('Artists').updateOne({_id: ObjectID(id)}, artist ,function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(true)
