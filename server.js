@@ -72,3 +72,10 @@ app.post('/searchSongs', function(req, res){
     res.json(result)
   })
 })
+
+app.post('/saveArtist', function(req, res){
+  var set= getDataControl.saveArtist(req.body.artist)
+  set.then(function(result){
+    res.json(result)
+  })
+})
