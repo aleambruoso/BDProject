@@ -97,6 +97,37 @@ exports.editArtist= function(artist, id){
     })
 }
 
+exports.getArtistById= function(names){
+    return new Promise(function(resolve, reject){
+        var ids=[]
+        var promises=[]
+        names.forEach(function(item){
+            var id= retrieveArtistId(item)
+            promises.push(id)
+        })
+        Promise.all(promises).then(function(result){
+            result.forEach(function(el){
+                if(el){
+                    ids.push(el.id)
+                }
+                else{
+                    ids.push("No")
+                }
+            })
+            resolve(ids)
+        })
+    })
+}
+
+exports.saveTrack= function(track){
+    return new Promise(function(resolve, reject){
+        var save= insertTrack(track)
+        save.then(function(result){
+            resolve(result)
+        })
+    })
+}
+
 function getHome(){
     return new Promise(function(resolve, reject){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
@@ -386,6 +417,35 @@ function updateArtist(artist, id){
             if (err) reject(err)
             var dbo = db.db(dbName)
             dbo.collection('Artists').updateOne({_id: ObjectID(id)}, artist ,function (err, result) {
+                if (err) reject(err)
+                db.close()
+                resolve(true)
+            })
+        })
+    })
+}
+
+function retrieveArtistId(name){
+    return new Promise(function(resolve, reject){
+        MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+            if (err) reject(err)
+            var dbo = db.db(dbName)
+            name=name.trim()
+            dbo.collection('Artists').findOne({name: {$regex: RegExp(name, "i")}}, {projection: {followers:0, genres:0, popularity:0, name:0}} ,function (err, result) {
+                if (err) reject(err)
+                db.close()
+                resolve(result)
+            })
+        })
+    })
+}
+
+function insertTrack(track){
+    return new Promise(function(resolve, reject){
+        MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+            if (err) reject(err)
+            var dbo = db.db(dbName)
+            dbo.collection('Tracks').insertOne(track, function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(true)

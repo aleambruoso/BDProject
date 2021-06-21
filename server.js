@@ -86,3 +86,17 @@ app.post('/editArtist', function(req, res){
     res.json(result)
   })
 })
+
+app.post('/getArtistId', function(req, res){
+  var get= getDataControl.getArtistById(req.body.name)
+  get.then(function(result){
+    res.json(result)
+  })
+})
+
+app.post('/saveTrack', function(req, res){
+  var set= getDataControl.saveTrack(req.body.track)
+  set.then(function(result){
+    res.json(result)
+  })
+})

@@ -24,6 +24,7 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
+    "flatpickr": "^4.6.9",
     "font-awesome": "^4.7.0",
     "fs": "0.0.1-security",
     "lodash": "^4.17.21",
