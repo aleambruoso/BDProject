@@ -1,5 +1,4 @@
 var express= require('express')
-var cookieParser = require('cookie-parser')
 var path = require('path')
 var session = require('express-session')
 var getDataControl = require('./app/control/getData.js')
@@ -9,7 +8,6 @@ var app= express()
 app.use(express.static(__dirname));
 app.use(express.static(__dirname + '/public'))
 app.use(express.static(__dirname + '/node_modules'))
-app.use(cookieParser())
 
 app.set('views', path.join(__dirname, '/app/views'))
 app.engine('html', require('ejs').renderFile)

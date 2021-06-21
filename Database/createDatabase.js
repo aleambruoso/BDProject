@@ -35,6 +35,8 @@ function insert () {
                     delete jsonObj.valence
                     delete jsonObj.tempo
                     delete jsonObj.time_signature
+                    jsonObj._id= jsonObj.id
+                    delete jsonObj.id
                 })
                 dbo.collection('Tracks').insertMany(result, function (err, result) {
                     if (err) throw err
@@ -83,6 +85,8 @@ function deleteArtists(array){
         var newJsonArray=[]
         array.forEach(function(elem){
             delete elem.year
+            elem._id= elem.id
+            delete elem.id
             var temp= elem.name
             var bool=true
             newJsonArray.forEach(function(toComp){
