@@ -97,7 +97,7 @@ exports.editArtist= function(artist, id){
     })
 }
 
-exports.getArtistById= function(names){
+exports.getArtistIdByName= function(names){
     return new Promise(function(resolve, reject){
         var ids=[]
         var promises=[]
@@ -123,6 +123,35 @@ exports.saveTrack= function(track){
     return new Promise(function(resolve, reject){
         var save= insertTrack(track)
         save.then(function(result){
+            resolve(result)
+        })
+    })
+}
+
+exports.getArtistNameById= function(stringId){
+    return new Promise(function(resolve, reject){
+        stringId= stringId.replace(/(\[|\]|\')/g, '')
+        var ids= stringId.split(',')
+        var promises=[]
+        var names=[]
+        ids.forEach(function(id){
+            id=id.trim()
+            var name=retrieveArtistName(id)
+            promises.push(name)
+        })
+        Promise.all(promises).then(function(result){
+            result.forEach(function(el){
+                names.push(el.name)
+            })
+            resolve(names)
+        })
+    })
+}
+
+exports.editTrack= function(json, id){
+    return new Promise(function(resolve, reject){
+        var edit= updateTrack(json, id)
+        edit.then(function(result){
             resolve(result)
         })
     })
@@ -446,6 +475,34 @@ function insertTrack(track){
             if (err) reject(err)
             var dbo = db.db(dbName)
             dbo.collection('Tracks').insertOne(track, function (err, result) {
+                if (err) reject(err)
+                db.close()
+                resolve(true)
+            })
+        })
+    })
+}
+
+function retrieveArtistName(id){
+    return new Promise(function(resolve, reject){
+        MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+            if (err) reject(err)
+            var dbo = db.db(dbName)
+            dbo.collection('Artists').findOne({id: id}, {projection: {followers:0, genres:0, popularity:0}}, function (err, result) {
+                if (err) reject(err)
+                db.close()
+                resolve(result)
+            })
+        })
+    })
+}
+
+function updateTrack(json, id){
+    return new Promise(function(resolve, reject){
+        MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
+            if (err) reject(err)
+            var dbo = db.db(dbName)
+            dbo.collection('Tracks').updateOne({_id: ObjectID(id)}, json ,function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(true)

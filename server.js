@@ -88,7 +88,7 @@ app.post('/editArtist', function(req, res){
 })
 
 app.post('/getArtistId', function(req, res){
-  var get= getDataControl.getArtistById(req.body.name)
+  var get= getDataControl.getArtistIdByName(req.body.name)
   get.then(function(result){
     res.json(result)
   })
@@ -96,6 +96,20 @@ app.post('/getArtistId', function(req, res){
 
 app.post('/saveTrack', function(req, res){
   var set= getDataControl.saveTrack(req.body.track)
+  set.then(function(result){
+    res.json(result)
+  })
+})
+
+app.post('/getArtistName', function(req, res){
+  var get= getDataControl.getArtistNameById(req.body.id)
+  get.then(function(result){
+    res.json(result)
+  })
+})
+
+app.post('/updateTrack', function(req, res){
+  var set= getDataControl.editTrack(req.body.json, req.body.id)
   set.then(function(result){
     res.json(result)
   })

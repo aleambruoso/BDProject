@@ -248,8 +248,7 @@ $(document).ready(function(){
                                         track.explicit= result.value
                                         Swal.fire({
                                             title: 'Aggiungi brano',
-                                            text: 'Inserisci la data di rilascio del brano',
-                                            html: '<input class="swal2-input" id="expiry-date">',
+                                            html: '<p>Inserisci la data di rilascio del brano</p></br><input class="swal2-input" id="expiry-date">',
                                             backdrop: true,
                                             showCloseButton: true,
                                             confirmButtonText: 'Avanti <i class="fa fa-arrow-right"></i>',
