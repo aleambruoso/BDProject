@@ -16,7 +16,7 @@ exports.getPage= function(page){
         else if(page=="dance"){
             var p1= getDance()
             p1.then(function(result){
-                resolve([result, "Top 100"])
+                resolve([result, "Top 50 dance"])
             })
         }
         else if(page=="artist"){
