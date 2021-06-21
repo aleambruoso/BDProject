@@ -27,6 +27,7 @@ $(document).ready(function(){
             url:'/getSongInfo',
             data:{id: id},
             success: function(result){
+                var track=result
                 var html="<b>Nome: </b>"+result.name+"</br><b>Artisti: </b>"+artists+"</br><b>Popolarità: </b>"+result.popularity
                 +"%</br><b>Esplicita: </b>"+((result.explicit=="0")? "No" : "Si") +"</br><b>Data di rilascio: </b>"+result.release_date+"</br><b>Quanto è energica (0 a 1): </b>"
                 +parseFloat(result.energy)+"</br><b>Quanto è dance (0 a 1): </b>"+parseFloat(result.danceability)+"</br><b>Quanto è strumentale (0 a 1): </b>"+parseFloat(result.instrumentalness)
@@ -40,7 +41,384 @@ $(document).ready(function(){
                     denyButtonText: 'Modifica'
                 }).then(function(result){
                     if(result.isDenied){
-
+                        Swal.fire({ 
+                            title: 'Modifica brano', 
+                            text: 'Inserisci il nome del brano',
+                            input: 'text',
+                            inputValue: track.name,
+                            backdrop: true,
+                            showCloseButton: true,
+                            confirmButtonText: 'Avanti <i class="fa fa-arrow-right"></i>',
+                            showLoaderOnConfirm: true,
+                            showDenyButton: true,
+                            denyButtonText: 'Salta',
+                            preConfirm: function(item){
+                                if(item==""){
+                                    Swal.showValidationMessage(
+                                        'Il campo non può essere vuoto'
+                                    )
+                                }
+                            },
+                            allowOutsideClick: () => !Swal.isLoading()
+                        }).then(function(result){
+                            var updateArtistJson={$set:{}}
+                            if(result.isConfirmed){
+                                updateArtistJson.$set.name=result.value
+                            }
+                            if(result.isConfirmed || result.isDenied){
+                                Swal.fire({ 
+                                    title: 'Aggiungi brano', 
+                                    text: 'Inserisci la popolarità del brano (da 0 a 100)',
+                                    input: 'text',
+                                    inputValue: track.popularity,
+                                    backdrop: true,
+                                    showCloseButton: true,
+                                    confirmButtonText: 'Avanti <i class="fa fa-arrow-right"></i>',
+                                    showLoaderOnConfirm: true,
+                                    showDenyButton: true,
+                                    denyButtonText: 'Salta',
+                                    preConfirm: function(item){
+                                        if(item==""){
+                                            Swal.showValidationMessage(
+                                                'Il campo non può essere vuoto'
+                                            )
+                                        }
+                                        else if(isNaN(item)){
+                                            Swal.showValidationMessage(
+                                                'Il campo deve contenere un numero'
+                                            )
+                                        }
+                                        else if(item<0 || item>100){
+                                            Swal.showValidationMessage(
+                                                'Il valore deve essere compreso tra 0 e 100'
+                                            )
+                                        }
+                                    },
+                                    allowOutsideClick: () => !Swal.isLoading()
+                                }).then(function(result){
+                                    if(result.isConfirmed){
+                                        updateArtistJson.$set.popularity=result.value
+                                    }
+                                    if(result.isConfirmed || result.isDenied){
+                                        Swal.fire({ 
+                                            title: 'Aggiungi brano', 
+                                            text: 'Inserisci la durata del brano in millisecondi',
+                                            input: 'text',
+                                            inputValue: track.duration_ms,
+                                            backdrop: true,
+                                            showCloseButton: true,
+                                            confirmButtonText: 'Avanti <i class="fa fa-arrow-right"></i>',
+                                            showLoaderOnConfirm: true,
+                                            showDenyButton: true,
+                                            denyButtonText: 'Salta',
+                                            preConfirm: function(item){
+                                                if(item==""){
+                                                    Swal.showValidationMessage(
+                                                        'Il campo non può essere vuoto'
+                                                    )
+                                                }
+                                                else if(isNaN(item)){
+                                                    Swal.showValidationMessage(
+                                                        'Il campo deve contenere un numero'
+                                                    )
+                                                }
+                                            },
+                                            allowOutsideClick: () => !Swal.isLoading()
+                                        }).then(function(result){
+                                            if(result.isConfirmed){
+                                                updateArtistJson.$set.duration_ms= result.value
+                                            }
+                                            if(result.isConfirmed || result.isDenied){
+                                                Swal.fire({ 
+                                                    title: 'Aggiungi brano', 
+                                                    text: 'Il brano è esplicito? (0-no 1-si)',
+                                                    input: 'text',
+                                                    inputPlaceholder: 'esplicito (0 o 1)...',
+                                                    backdrop: true,
+                                                    showCloseButton: true,
+                                                    confirmButtonText: 'Avanti <i class="fa fa-arrow-right"></i>',
+                                                    showLoaderOnConfirm: true,
+                                                    showDenyButton: true,
+                                                    denyButtonText: 'Salta',
+                                                    preConfirm: function(item){
+                                                        if(item==""){
+                                                            Swal.showValidationMessage(
+                                                                'Il campo non può essere vuoto'
+                                                            )
+                                                        }
+                                                        else if(isNaN(item)){
+                                                            Swal.showValidationMessage(
+                                                                'Il campo deve contenere un numero'
+                                                            )
+                                                        }
+                                                        else if(item!=0 && item!=1){
+                                                            Swal.showValidationMessage(
+                                                                'Il valore deve essere o 0 o 1'
+                                                            )
+                                                        }
+                                                    },
+                                                    allowOutsideClick: () => !Swal.isLoading()
+                                                }).then(function(result){
+                                                    if(result.isConfirmed){
+                                                        updateArtistJson.$set.explicit= result.value
+                                                    }
+                                                    if(result.isConfirmed || result.isDenied){
+                                                        Swal.fire({
+                                                            title: 'Aggiungi brano',
+                                                            html: '<p>Inserisci la data di rilascio del brano</p></br><input class="swal2-input" id="expiry-date">',
+                                                            backdrop: true,
+                                                            showCloseButton: true,
+                                                            confirmButtonText: 'Avanti <i class="fa fa-arrow-right"></i>',
+                                                            showLoaderOnConfirm: true,
+                                                            showDenyButton: true,
+                                                            denyButtonText: 'Salta',
+                                                            preConfirm: () => {
+                                                              if (flatpickrInstance.selectedDates[0] > new Date()) {
+                                                                Swal.showValidationMessage('La data di uscita non può essere nel futuro')
+                                                              }
+                                                            },
+                                                            willOpen: () => {
+                                                              flatpickrInstance = flatpickr(
+                                                                Swal.getPopup().querySelector('#expiry-date'), {defaultDate: track.release_date}
+                                                              )
+                                                            }
+                                                        }).then(function(result){
+                                                            if(result.isConfirmed){
+                                                                updateArtistJson.$set.release_date=new Date(flatpickrInstance.selectedDates[0].getTime()- (flatpickrInstance.selectedDates[0].getTimezoneOffset()*60*1000)).toISOString().split('T')[0]
+                                                            }
+                                                            if(result.isConfirmed || result.isDenied){
+                                                                Swal.fire({ 
+                                                                    title: 'Aggiungi brano', 
+                                                                    text: 'Inserisci quanto il brano sia dance (da 0 a 1)',
+                                                                    input: 'range',
+                                                                    inputAttributes: {
+                                                                        min: 0,
+                                                                        max: 1,
+                                                                        step: 0.01
+                                                                    },
+                                                                    inputValue: track.danceability,
+                                                                    backdrop: true,
+                                                                    showCloseButton: true,
+                                                                    confirmButtonText: 'Avanti <i class="fa fa-arrow-right"></i>',
+                                                                    showLoaderOnConfirm: true,
+                                                                    showDenyButton: true,
+                                                                    denyButtonText: 'Salta',
+                                                                    preConfirm: function(item){
+                                                                        if(item==""){
+                                                                            Swal.showValidationMessage(
+                                                                                'Il campo non può essere vuoto'
+                                                                            )
+                                                                        }
+                                                                        else if(isNaN(item)){
+                                                                            Swal.showValidationMessage(
+                                                                                'Il campo deve contenere un numero'
+                                                                            )
+                                                                        }
+                                                                        else if(item<0 || item>1){
+                                                                            Swal.showValidationMessage(
+                                                                                'Il valore deve essere compreso tra 0 e 1'
+                                                                            )
+                                                                        }
+                                                                    },
+                                                                    allowOutsideClick: () => !Swal.isLoading()
+                                                                }).then(function(result){
+                                                                    if(result.isConfirmed){
+                                                                        updateArtistJson.$set.danceability=result.value
+                                                                    }
+                                                                    if(result.isConfirmed || result.isDenied){
+                                                                        Swal.fire({ 
+                                                                            title: 'Aggiungi brano', 
+                                                                            text: 'Inserisci quanto il brano sia energico (da 0 a 1)',
+                                                                            input: 'range',
+                                                                            inputAttributes: {
+                                                                                min: 0,
+                                                                                max: 1,
+                                                                                step: 0.01
+                                                                            },
+                                                                            inputValue: track.energy,
+                                                                            backdrop: true,
+                                                                            showCloseButton: true,
+                                                                            confirmButtonText: 'Avanti <i class="fa fa-arrow-right"></i>',
+                                                                            showLoaderOnConfirm: true,
+                                                                            showDenyButton: true,
+                                                                            denyButtonText: 'Salta',
+                                                                            preConfirm: function(item){
+                                                                                if(item==""){
+                                                                                    Swal.showValidationMessage(
+                                                                                        'Il campo non può essere vuoto'
+                                                                                    )
+                                                                                }
+                                                                                else if(isNaN(item)){
+                                                                                    Swal.showValidationMessage(
+                                                                                        'Il campo deve contenere un numero'
+                                                                                    )
+                                                                                }
+                                                                                else if(item<0 || item>1){
+                                                                                    Swal.showValidationMessage(
+                                                                                        'Il valore deve essere compreso tra 0 e 1'
+                                                                                    )
+                                                                                }
+                                                                            },
+                                                                            allowOutsideClick: () => !Swal.isLoading()
+                                                                        }).then(function(result){
+                                                                            if(result.isConfirmed){
+                                                                                updateArtistJson.$set.energy=result.value
+                                                                            }
+                                                                            if(result.isConfirmed || result.isDenied){
+                                                                                Swal.fire({ 
+                                                                                    title: 'Aggiungi brano', 
+                                                                                    text: 'Inserisci quanto il brano sia strumentale (da 0 a 1)',
+                                                                                    input: 'range',
+                                                                                    inputAttributes: {
+                                                                                        min: 0,
+                                                                                        max: 1,
+                                                                                        step: 0.01
+                                                                                    },
+                                                                                    inputValue: track.instrumentalness,
+                                                                                    backdrop: true,
+                                                                                    showCloseButton: true,
+                                                                                    confirmButtonText: 'Avanti <i class="fa fa-arrow-right"></i>',
+                                                                                    showLoaderOnConfirm: true,
+                                                                                    showDenyButton: true,
+                                                                                    denyButtonText: 'Salta',
+                                                                                    preConfirm: function(item){
+                                                                                        if(item==""){
+                                                                                            Swal.showValidationMessage(
+                                                                                                'Il campo non può essere vuoto'
+                                                                                            )
+                                                                                        }
+                                                                                        else if(isNaN(item)){
+                                                                                            Swal.showValidationMessage(
+                                                                                                'Il campo deve contenere un numero'
+                                                                                            )
+                                                                                        }
+                                                                                        else if(item<0 || item>1){
+                                                                                            Swal.showValidationMessage(
+                                                                                                'Il valore deve essere compreso tra 0 e 1'
+                                                                                            )
+                                                                                        }
+                                                                                    },
+                                                                                    allowOutsideClick: () => !Swal.isLoading()
+                                                                                }).then(function(result){
+                                                                                    if(result.isConfirmed){
+                                                                                        updateArtistJson.$set.instrumentalness= result.value
+                                                                                    }
+                                                                                    if(result.isConfirmed || result.isDenied){
+                                                                                        var ids=[]
+                                                                                        $.ajax({
+                                                                                            type: 'POST',
+                                                                                            url:'/getArtistName',
+                                                                                            data:{id: track.id_artists},
+                                                                                            success: function(names){
+                                                                                                stringNames=""
+                                                                                                names.forEach(function(name){
+                                                                                                    stringNames+=name
+                                                                                                    stringNames+=", "
+                                                                                                })
+                                                                                                stringNames= stringNames.substring(0, stringNames.length-2)
+                                                                                                Swal.fire({ 
+                                                                                                    title: 'Aggiungi brano', 
+                                                                                                    text: 'Inserisci gli artisti del brano (scrivere "Non presenti" nel caso non ci siano)',
+                                                                                                    input: 'text',
+                                                                                                    inputValue: stringNames,
+                                                                                                    backdrop: true,
+                                                                                                    showCloseButton: true,
+                                                                                                    confirmButtonText: 'Avanti <i class="fa fa-arrow-right"></i>',
+                                                                                                    showLoaderOnConfirm: true,
+                                                                                                    showDenyButton: true,
+                                                                                                    denyButtonText: 'Salta',
+                                                                                                    preConfirm: function(item){
+                                                                                                        return new Promise(function(resolve, reject){
+                                                                                                            ids=[]
+                                                                                                            if(item==""){
+                                                                                                                Swal.showValidationMessage(
+                                                                                                                    'Il campo non può essere vuoto'
+                                                                                                                )
+                                                                                                            }
+                                                                                                            if(item!="Non presenti"){
+                                                                                                                var artisti= item.split(',')
+                                                                                                                $.ajax({
+                                                                                                                    type: 'POST',
+                                                                                                                    url:'/getArtistId',
+                                                                                                                    data:{name: artisti},
+                                                                                                                    success: function(result){
+                                                                                                                        var i=0
+                                                                                                                        result.forEach(function(elem){
+                                                                                                                            elem.trim()
+                                                                                                                            if(elem=="No"){
+                                                                                                                                Swal.showValidationMessage(
+                                                                                                                                    'Impossibile trovare l\'artista '+artisti[i]
+                                                                                                                                )
+                                                                                                                            }
+                                                                                                                            else{
+                                                                                                                                ids.push(elem)
+                                                                                                                            }
+                                                                                                                            i++
+                                                                                                                        })
+                                                                                                                        resolve()
+                                                                                                                    }
+                                                                                                                })
+                                                                                                            }
+                                                                                                        })
+                                                                                                    },
+                                                                                                    allowOutsideClick: () => !Swal.isLoading()
+                                                                                                }).then(function(result){
+                                                                                                    if(result.isConfirmed){
+                                                                                                        if(ids.length==0){
+                                                                                                            var trackArtists="[]"
+                                                                                                        }
+                                                                                                        else{
+                                                                                                            var trackArtists="["
+                                                                                                            ids.forEach(function(elem){
+                                                                                                                elem.trim()
+                                                                                                                trackArtists+="'"+elem+"'"
+                                                                                                                trackArtists+=", "
+                                                                                                            })
+                                                                                                            trackArtists= trackArtists.substr(0, trackArtists.length-2)
+                                                                                                            trackArtists+="]"
+                                                                                                        }
+                                                                                                        updateArtistJson.$set.id_artists=trackArtists
+                                                                                                    }
+                                                                                                    if(result.isConfirmed || result.isDenied){
+                                                                                                        if(Object.keys(updateArtistJson.$set).length !== 0){
+                                                                                                            $.ajax({
+                                                                                                                type: 'POST',
+                                                                                                                url:'/updateTrack',
+                                                                                                                data:{json: updateArtistJson, id: track._id},
+                                                                                                                success: function(result){
+                                                                                                                    Swal.fire({
+                                                                                                                        icon: 'success', 
+                                                                                                                        title: 'Brano modificato', 
+                                                                                                                        text: 'Il brano è stato modificato con successo.',
+                                                                                                                        showCloseButton: true,
+                                                                                                                        confirmButtonText: 'Ok'
+                                                                                                                    })
+                                                                                                                    .then(function(result){
+                                                                                                                        location.reload()
+                                                                                                                    })
+                                                                                                                }
+                                                                                                            })
+                                                                                                        }
+                                                                                                    }
+                                                                                                })
+                                                                                            }
+                                                                                        })
+                                                                                    }
+                                                                                })
+                                                                            }
+                                                                        })
+                                                                    }
+                                                                })
+                                                            }
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        })
                     }
                 })
             }
@@ -203,22 +581,24 @@ $(document).ready(function(){
                                                         }
                                                     }
                                                     if(result.isConfirmed || result.isDenied){
-                                                        $.ajax({
-                                                            type: 'POST',
-                                                            url:'/editArtist',
-                                                            data:{artist: updateJson, id: artist._id},
-                                                            success: function(result){
-                                                                Swal.fire({
-                                                                    icon: 'success', 
-                                                                    title: 'Artista modificato', 
-                                                                    text: 'L\'artista è stato modificato con successo.',
-                                                                    showCloseButton: true,
-                                                                    confirmButtonText: 'Ok'
-                                                                }).then(function(result){
-                                                                    location.reload()
-                                                                })
-                                                            }
-                                                        })
+                                                        if(Object.keys(updateJson.$set).length !== 0){
+                                                            $.ajax({
+                                                                type: 'POST',
+                                                                url:'/editArtist',
+                                                                data:{artist: updateJson, id: artist._id},
+                                                                success: function(result){
+                                                                    Swal.fire({
+                                                                        icon: 'success', 
+                                                                        title: 'Artista modificato', 
+                                                                        text: 'L\'artista è stato modificato con successo.',
+                                                                        showCloseButton: true,
+                                                                        confirmButtonText: 'Ok'
+                                                                    }).then(function(result){
+                                                                        location.reload()
+                                                                    })
+                                                                }
+                                                            })
+                                                        }
                                                     }
                                                 })
                                             }
@@ -235,7 +615,6 @@ $(document).ready(function(){
 
     $(document).on("click", '.generi_line', function(){
         var title= $(this).children('.title_genre').text()
-        console.log(title)
         var index= pageData.findIndex(function(item){return item.title==title})
         var html="<b>Genere: </b>"+title+"</br><b>"
         var artisti= pageData[index].artistsName
@@ -294,7 +673,6 @@ $(document).ready(function(){
 
     $('.search_song').on('input', function(){
         var val= $(this).val()
-        console.log(val.length)
         if (val.length==0){
             $('.song_line').remove()
             startPage(pageName, pageData)
