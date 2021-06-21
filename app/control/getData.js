@@ -78,9 +78,7 @@ exports.searchSongs= function(val){
 
 exports.saveArtist= function(artist){
     return new Promise(function(resolve, reject){
-        var id= ObjectID()
-        artist.id= id.toString()
-        artist._id= id
+        artist._id= ObjectID().toString()
         var set= insertArtist(artist)
         set.then(function(result){
             resolve(result)
@@ -108,7 +106,7 @@ exports.getArtistIdByName= function(names){
         Promise.all(promises).then(function(result){
             result.forEach(function(el){
                 if(el){
-                    ids.push(el.id)
+                    ids.push(el._id)
                 }
                 else{
                     ids.push("No")
@@ -121,6 +119,7 @@ exports.getArtistIdByName= function(names){
 
 exports.saveTrack= function(track){
     return new Promise(function(resolve, reject){
+        track._id= ObjectID().toString()
         var save= insertTrack(track)
         save.then(function(result){
             resolve(result)
@@ -238,7 +237,7 @@ function getArtistsName(ids){
                 var promises=[]
 
                 var prom= new Promise(function(resolve, reject){
-                    dbo.collection('Artists').findOne({id: array[i]}, {projection:{followers:0, genres:0, popularity:0}}, function(err, result){
+                    dbo.collection('Artists').findOne({_id: array[i]}, {projection:{followers:0, genres:0, popularity:0}}, function(err, result){
                         if (err) reject(err)
                             resolve(result)
                     })
@@ -262,7 +261,7 @@ function getArtistId(id){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Artists').findOne({_id: ObjectID(id)}, function (err, result) {
+            dbo.collection('Artists').findOne({_id: id}, function (err, result) {
                 if (err) reject(err)
                 db.close()
                 var generi= result.genres
@@ -284,7 +283,7 @@ function getSongId(id){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Tracks').findOne({_id: ObjectID(id)}, function (err, result) {
+            dbo.collection('Tracks').findOne({_id: id}, function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(result)
@@ -445,7 +444,7 @@ function updateArtist(artist, id){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Artists').updateOne({_id: ObjectID(id)}, artist ,function (err, result) {
+            dbo.collection('Artists').updateOne({_id: id}, artist ,function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(true)
@@ -488,7 +487,7 @@ function retrieveArtistName(id){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Artists').findOne({id: id}, {projection: {followers:0, genres:0, popularity:0}}, function (err, result) {
+            dbo.collection('Artists').findOne({_id: id}, {projection: {followers:0, genres:0, popularity:0}}, function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(result)
@@ -502,7 +501,7 @@ function updateTrack(json, id){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Tracks').updateOne({_id: ObjectID(id)}, json ,function (err, result) {
+            dbo.collection('Tracks').updateOne({_id: id}, json ,function (err, result) {
                 if (err) reject(err)
                 db.close()
                 resolve(true)
