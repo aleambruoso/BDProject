@@ -233,13 +233,14 @@ function getArtistsName(ids){
             var dbo = db.db(dbName)
             ids= ids.replace(/(\[|\]|\')/g, '')
             var array= ids.split(',')
+            var promises=[]
             for(var i=0; i<array.length; i++){
-                var promises=[]
+                array[i]= array[i].trim()
 
                 var prom= new Promise(function(resolve, reject){
                     dbo.collection('Artists').findOne({_id: array[i]}, {projection:{followers:0, genres:0, popularity:0}}, function(err, result){
                         if (err) reject(err)
-                            resolve(result)
+                        resolve(result)
                     })
                 })
 
