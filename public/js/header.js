@@ -754,7 +754,9 @@ function millisToMinutesAndSeconds(millis) {
 function getArtistsName(artists){
     var text=""
     artists.forEach(function(artist){
-        text+=artist.name+', '
+        if(artist!=null){
+            text+=artist.name+', '
+        }
     })
     return text.substring(0, text.length-2)
 }
