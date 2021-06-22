@@ -79,6 +79,7 @@ exports.searchSongs= function(val){
 exports.saveArtist= function(artist){
     return new Promise(function(resolve, reject){
         artist._id= ObjectID().toString()
+        artist.popularity= parseInt(artist.popularity)
         var set= insertArtist(artist)
         set.then(function(result){
             resolve(result)
@@ -88,6 +89,9 @@ exports.saveArtist= function(artist){
 
 exports.editArtist= function(artist, id){
     return new Promise(function(resolve, reject){
+        if(artist.$set.popularity!=null){
+            artist.$set.popularity= parseInt(artist.$set.popularity)
+        }
         var edit= updateArtist(artist, id)
         edit.then(function(result){
             resolve(result)
@@ -120,6 +124,7 @@ exports.getArtistIdByName= function(names){
 exports.saveTrack= function(track){
     return new Promise(function(resolve, reject){
         track._id= ObjectID().toString()
+        track.popularity= parseInt(track.popularity)
         var save= insertTrack(track)
         save.then(function(result){
             resolve(result)
@@ -149,6 +154,9 @@ exports.getArtistNameById= function(stringId){
 
 exports.editTrack= function(json, id){
     return new Promise(function(resolve, reject){
+        if(json.$set.popularity!=null){
+            json.$set.popularity= parseInt(json.$set.popularity)
+        }
         var edit= updateTrack(json, id)
         edit.then(function(result){
             resolve(result)
@@ -196,7 +204,7 @@ function getArtists(){
             if (err) reject(err)
             var dbo = db.db(dbName)
             var arr=[]
-            dbo.collection('Artists').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 87]}}}, {sort:{popularity: -1}}).toArray(function (err, result) {
+            dbo.collection('Artists').find({popularity: {$gt:87}}, {sort:{popularity: -1}}).toArray(function (err, result) {
                 if (err) reject(err)
                 var data= result.slice(0, 50)
                 var get= resolveGenres(data)
