@@ -161,7 +161,7 @@ function getHome(){
         MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, db) {
             if (err) reject(err)
             var dbo = db.db(dbName)
-            dbo.collection('Tracks').find({$query: {$expr: {$gt: [{$toInt: "$popularity"}, 85]}}}, {sort: {popularity: -1}, projection:{explicit:0, release_date:0, danceability:0, energy:0, instrumentalness:0}}).toArray(function (err, result) {
+            dbo.collection('Tracks').find({popularity: {$gt:85}}, {sort: {popularity: -1}, projection:{explicit:0, release_date:0, danceability:0, energy:0, instrumentalness:0}}).toArray(function (err, result) {
                 if (err) reject(err)
                 var get= resolveArtists(result.slice(0,100))
                 get.then(function(result1){
